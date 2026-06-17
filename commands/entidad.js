@@ -20,7 +20,13 @@ module.exports = {
         return this.buyFromEntity(message, args.slice(1));
       }
 
-      return this.showHelp(message);
+      // !entidad <nombre> tienda
+      if (args[1] && args[1].toLowerCase() === 'tienda') {
+        return this.showEntityShop(message, subcommand);
+      }
+
+      // !entidad <nombre> → mostrar info de la entidad/empresa
+      return this.showEntityInfo(message, subcommand);
     } catch (error) {
       await ErrorHandler.handleError(error, message, 'entidad');
     }
@@ -140,17 +146,10 @@ module.exports = {
         total_spent: user.total_spent + finalPrice
       });
 
-      // 2. Enviar IVA al gobierno (invalidar cache primero)
-      message.client.db.invalidateCache('entidad_gobierno');
-      const gobierno = await message.client.db.getEntidad('gobierno');
-      console.log(`[ENTIDAD] Enviando IVA ${ivaAmount} al gobierno. Balance actual: ${gobierno?.balance}`);
-
-      if (gobierno) {
-        await message.client.db.updateEntidad('gobierno', {
-          balance: gobierno.balance + ivaAmount,
-          total_earned: gobierno.total_earned + ivaAmount
-        });
-        console.log(`[ENTIDAD] Nuevo balance gobierno: ${gobierno.balance + ivaAmount}`);
+      // 2. Enviar IVA al gobierno
+      if (ivaAmount > 0) {
+        await message.client.db.addToGobierno(ivaAmount);
+        console.log(`[ENTIDAD] +${ivaAmount} IVA al gobierno`);
       }
 
       // 3. Enviar resto a la empresa
@@ -203,6 +202,119 @@ module.exports = {
 
     } catch (error) {
       await ErrorHandler.handleError(error, message, 'compra entidad');
+    }
+  },
+
+  async showEntityShop(message, entityName) {
+    try {
+      const empresas = await message.client.db.getAllEmpresas();
+      const empresa = empresas.find(e =>
+        e.id === entityName ||
+        e.name.toLowerCase() === entityName ||
+        e.name.toLowerCase().includes(entityName)
+      );
+
+      if (!empresa) {
+        const embed = new EmbedBuilder()
+          .setColor('#ff6b6b')
+          .setTitle('Entidad No Encontrada')
+          .setDescription(`No existe ninguna empresa llamada **${entityName}**.`)
+          .addFields({
+            name: 'Empresas disponibles',
+            value: empresas.length > 0
+              ? empresas.map(e => `• ${e.emoji || '🏢'} **${e.name}**`).join('\n')
+              : 'No hay empresas registradas.',
+            inline: false
+          })
+          .setTimestamp();
+        return message.reply({ embeds: [embed] });
+      }
+
+      const products = await message.client.db.getEmpresaProducts(empresa.id);
+      const ivaRate = config.iva || 33;
+
+      const embed = new EmbedBuilder()
+        .setColor('#4169e1')
+        .setTitle(`${empresa.emoji || '🏢'} Tienda de ${empresa.name}`)
+        .setDescription(empresa.description || 'Productos de esta empresa.')
+        .setTimestamp();
+
+      if (products.length === 0) {
+        embed.addFields({ name: 'Sin productos', value: 'Esta empresa no tiene productos disponibles.', inline: false });
+      } else {
+        const productList = products.map(p =>
+          `**ID:** \`${p.product_id}\` | ${p.emoji || '📦'} **${p.name}** | ${CurrencyHelper.format(p.price)} + IVA ${ivaRate}% = ${CurrencyHelper.format(p.price + Math.floor(p.price * ivaRate / 100))}\n*${p.description || ''}*`
+        ).join('\n\n');
+
+        embed.addFields({ name: '🛍️ Productos', value: productList, inline: false });
+      }
+
+      embed.addFields({
+        name: '💡 Cómo Comprar',
+        value: `Usa \`!entidad comprar ${empresa.name.toLowerCase()} <id>\``,
+        inline: false
+      });
+
+      await message.reply({ embeds: [embed] });
+    } catch (error) {
+      await ErrorHandler.handleError(error, message, 'entidad tienda');
+    }
+  },
+
+  async showEntityInfo(message, entityName) {
+    try {
+      // Buscar primero en empresas
+      const empresas = await message.client.db.getAllEmpresas();
+      const empresa = empresas.find(e =>
+        e.id === entityName ||
+        e.name.toLowerCase() === entityName ||
+        e.name.toLowerCase().includes(entityName)
+      );
+
+      if (empresa) {
+        const products = await message.client.db.getEmpresaProducts(empresa.id);
+        const embed = new EmbedBuilder()
+          .setColor('#4169e1')
+          .setTitle(`${empresa.emoji || '🏢'} ${empresa.name}`)
+          .setDescription(empresa.description || 'Empresa del Reino del Pan')
+          .addFields(
+            { name: '💰 Balance', value: CurrencyHelper.format(empresa.balance), inline: true },
+            { name: '📦 Productos', value: `${products.length} producto(s)`, inline: true }
+          )
+          .addFields({
+            name: '🛍️ Ver tienda',
+            value: `Usa \`!entidad ${empresa.name.toLowerCase()} tienda\``,
+            inline: false
+          })
+          .setTimestamp();
+        return message.reply({ embeds: [embed] });
+      }
+
+      // Si no es empresa, buscar en entidades
+      const entidad = await message.client.db.getEntidad(entityName);
+      if (entidad) {
+        const embed = new EmbedBuilder()
+          .setColor('#1a3a6b')
+          .setTitle(`${entidad.emoji || '🏛️'} ${entidad.name}`)
+          .setDescription(entidad.description || '')
+          .addFields(
+            { name: '💰 Balance', value: CurrencyHelper.format(entidad.balance), inline: true },
+            { name: '📈 Total Recaudado', value: CurrencyHelper.format(entidad.total_earned), inline: true },
+            { name: '📉 Total Retirado', value: CurrencyHelper.format(entidad.total_withdrawn), inline: true }
+          )
+          .setTimestamp();
+        return message.reply({ embeds: [embed] });
+      }
+
+      const embed = new EmbedBuilder()
+        .setColor('#ff6b6b')
+        .setTitle('Entidad No Encontrada')
+        .setDescription(`No existe ninguna entidad o empresa llamada **${entityName}**.`)
+        .setTimestamp();
+      return message.reply({ embeds: [embed] });
+
+    } catch (error) {
+      await ErrorHandler.handleError(error, message, 'entidad info');
     }
   },
 

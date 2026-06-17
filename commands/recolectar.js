@@ -113,13 +113,7 @@ module.exports = {
 
       // Enviar IRPF al gobierno
       if (irpfAmount > 0) {
-        const gobierno = await message.client.db.getEntidad('gobierno');
-        if (gobierno) {
-          await message.client.db.updateEntidad('gobierno', {
-            balance: gobierno.balance + irpfAmount,
-            total_earned: gobierno.total_earned + irpfAmount
-          });
-        }
+        await message.client.db.addToGobierno(irpfAmount);
       }
 
       await message.client.db.addTransaction(message.author.id, 'collect', netAmount, `Recolección: ${collectedCategories.map(c => c.name).join(', ')}`);

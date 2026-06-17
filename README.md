@@ -198,10 +198,6 @@ Un bot de economía.
      is_public BOOLEAN DEFAULT true
    );
 
-   -- Insertar Gobierno del Reino por defecto
-   INSERT INTO entidades (id, name, description, emoji, balance, total_earned, is_public)
-   VALUES ('gobierno', 'Gobierno del Reino', 'Entidad gubernamental del Reino del Pan', '🏛️', 0, 0, true);
-
    -- Habilitar RLS
    ALTER TABLE entidades ENABLE ROW LEVEL SECURITY;
 
@@ -214,6 +210,40 @@ Un bot de economía.
 
    CREATE POLICY "update_entidades" ON entidades FOR UPDATE
      TO authenticated USING (true) WITH CHECK (true);
+
+   -- Tabla del gobierno (entidad gubernamental independiente)
+   CREATE TABLE IF NOT EXISTS gobierno (
+     id TEXT PRIMARY KEY,
+     name TEXT NOT NULL,
+     description TEXT,
+     emoji TEXT DEFAULT '🏛️',
+     balance BIGINT NOT NULL DEFAULT 0,
+     total_earned BIGINT NOT NULL DEFAULT 0,
+     total_withdrawn BIGINT NOT NULL DEFAULT 0,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     is_public BOOLEAN DEFAULT true
+   );
+
+   -- Habilitar RLS
+   ALTER TABLE gobierno ENABLE ROW LEVEL SECURITY;
+
+   -- Políticas RLS
+   CREATE POLICY "select_gobierno" ON gobierno FOR SELECT
+     TO anon, authenticated USING (true);
+
+   CREATE POLICY "insert_gobierno" ON gobierno FOR INSERT
+     TO authenticated WITH CHECK (true);
+
+   CREATE POLICY "update_gobierno" ON gobierno FOR UPDATE
+     TO authenticated USING (true) WITH CHECK (true);
+
+   CREATE POLICY "delete_gobierno" ON gobierno FOR DELETE
+     TO authenticated USING (true);
+
+   -- Insertar Gobierno del Reino por defecto
+   INSERT INTO gobierno (id, name, description, emoji, balance, total_earned, total_withdrawn, created_at, is_public)
+   VALUES ('gobierno', 'Gobierno del Reino', 'Entidad gubernamental del Reino del Pan', '🏛️', 0, 0, 0, NOW(), true)
+   ON CONFLICT (id) DO NOTHING;
 
    -- Tabla de empresas (creadas por usuarios)
    CREATE TABLE empresas (

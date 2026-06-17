@@ -226,23 +226,9 @@ module.exports = {
 
   async sendToGovernment(message, amount) {
     try {
-      // Invalidar cache primero para obtener valor actualizado
-      message.client.db.invalidateCache('entidad_gobierno');
-
-      const gobierno = await message.client.db.getEntidad('gobierno');
-      console.log(`[TIENDA] Enviando ${amount} al gobierno. Balance actual: ${gobierno?.balance}`);
-
-      if (gobierno && amount > 0) {
-        const newBalance = gobierno.balance + amount;
-        const newTotalEarned = gobierno.total_earned + amount;
-
-        await message.client.db.updateEntidad('gobierno', {
-          balance: newBalance,
-          total_earned: newTotalEarned
-        });
-
-        console.log(`[TIENDA] Nuevo balance gobierno: ${newBalance}`);
-      }
+      if (amount <= 0) return;
+      await message.client.db.addToGobierno(amount);
+      console.log(`[TIENDA] +${amount} al gobierno`);
     } catch (error) {
       console.error('[TIENDA] Error enviando dinero al gobierno:', error);
     }
