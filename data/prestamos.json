@@ -1,0 +1,52 @@
+{
+  "loans": [
+    {
+      "id": "1",
+      "name": "Préstamo Básico",
+      "description": "Préstamo pequeño para gastos menores",
+      "amount": 2500,
+      "days": 30,
+      "emoji": "💰",
+      "requirements": {
+        "minTotalEarned": 5000,
+        "maxDebtRatio": 2.0
+      }
+    },
+    {
+      "id": "2", 
+      "name": "Préstamo Comercial",
+      "description": "Préstamo mediano para inversiones",
+      "amount": 7500,
+      "days": 30,
+      "emoji": "🏪",
+      "requirements": {
+        "minTotalEarned": 15000,
+        "maxDebtRatio": 1.8
+      }
+    },
+    {
+      "id": "3",
+      "name": "Préstamo Empresarial", 
+      "description": "Préstamo grande para grandes proyectos",
+      "amount": 15000,
+      "days": 30,
+      "emoji": "🏢",
+      "requirements": {
+        "minTotalEarned": 30000,
+        "maxDebtRatio": 1.5
+      }
+    },
+    {
+      "id": "4",
+      "name": "Préstamo Real",
+      "description": "El préstamo más grande del reino",
+      "amount": 50000,
+      "days": 30,
+      "emoji": "👑",
+      "requirements": {
+        "minTotalEarned": 100000,
+        "maxDebtRatio": 1.2
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "categories": {
+    "trabajadores": {
+      "name": "Trabajadores",
+      "description": "Roles de trabajo básico del reino",
+      "cooldown": 28800000,
+      "amount": 1000,
+      "emoji": "👷",
+      "roles": [
+        "1397952516616093836",
+        "1399311408822489128",
+        "1397951118536999082",  
+        "1399115846583976077",
+        "1397952180538835034",
+        "1399310000463020059"      
+      ]
+    },
+    "especial": {
+      "name": "Rol ludópata",
+      "description": "Rol ludópata",
+      "cooldown": 54000000,
+      "amount": 1000,
+      "emoji": "⭐",
+      "roles": [
+        "1401891479399567361" 
+      ]
+    }
+  }
+}

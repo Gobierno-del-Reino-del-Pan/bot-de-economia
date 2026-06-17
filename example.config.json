@@ -1,0 +1,66 @@
+{
+  "prefix": "!",
+  "token": "TU_TOKEN_AQUI",
+  "clientId": "TU_CLIENT_ID_AQUI",
+
+  "currency": {
+    "emoji": "<:TuEmojiAqui:000000000000000000>"
+  },
+
+  "supabase": {
+    "url": "https://tu-proyecto.supabase.co",
+    "anonKey": "TU_ANON_KEY_AQUI",
+    "serviceRoleKey": "TU_SERVICE_ROLE_KEY_AQUI"
+  },
+
+  "economy": {
+    "workMin": 100,
+    "workMax": 500,
+    "dailyAmount": 1000,
+    "weeklyAmount": 5000,
+    "monthlyAmount": 20000,
+    "workCooldown": 1800000,
+    "dailyCooldown": 86400000,
+    "weeklyCooldown": 604800000,
+    "monthlyCooldown": 2592000000,
+    "robChance": 30,
+    "robMin": 50,
+    "robMax": 1000,
+    "robCooldown": 7200000,
+    "slutCooldown": 86400000,
+    "slutMin": 200,
+    "slutMax": 800,
+    "crimeCooldown": 86400000,
+    "crimeMin": 300,
+    "crimeMax": 1200
+  },
+
+  "antibot": {
+    "enabled": true,
+    "webhook": "TU_WEBHOOK_AQUI",
+    "thresholds": {},
+    "features": {}
+  },
+
+  "casino": {
+    "minBet": 100,
+    "maxBet": 1000000,
+    "rouletteTimeout": 30000
+  },
+
+  "loans": {
+    "interestRate": 30,
+    "maxActiveLoans": 1,
+    "qualificationRatio": 2.0
+  },
+
+  "staffRoles": [
+    "ID_ROL_STAFF_AQUI"
+  ],
+  "bankerRoles": [
+    "ID_ROL_BANKER_AQUI"
+  ],
+  "iva": 33,
+  "irpf": 7,
+  "levelUpChannel": "ID_DEL_CANAL_AQUI"
+}

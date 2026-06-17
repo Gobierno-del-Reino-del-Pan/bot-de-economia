@@ -1,0 +1,11 @@
+{
+  "roles": [
+    { "level": 5,  "roleId": "ROLE_ID_AQUI", "name": "Novato" },
+    { "level": 10, "roleId": "ROLE_ID_AQUI", "name": "Aprendiz" },
+    { "level": 20, "roleId": "ROLE_ID_AQUI", "name": "Veterano" },
+    { "level": 30, "roleId": "ROLE_ID_AQUI", "name": "Experto" },
+    { "level": 50, "roleId": "ROLE_ID_AQUI", "name": "Élite" },
+    { "level": 75, "roleId": "ROLE_ID_AQUI", "name": "Leyenda" },
+    { "level": 100,"roleId": "ROLE_ID_AQUI", "name": "Rey del Pan" }
+  ]
+}

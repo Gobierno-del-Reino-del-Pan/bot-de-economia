@@ -1,0 +1,167 @@
+{
+  "categories": {
+    "food": {
+      "name": "Alimentos",
+      "emoji": "🍞",
+      "description": "Deliciosos panes y alimentos del reino"
+    },
+    "roles": {
+      "name": "Roles",
+      "emoji": "👑",
+      "description": "Roles exclusivos que otorgan privilegios especiales"
+    },
+    "boosts": {
+      "name": "Potenciadores",
+      "emoji": "⚡",
+      "description": "Items que mejoran tus ganancias"
+    },
+    "horses": {
+      "name": "Caballos",
+      "emoji": "🐎",
+      "description": "Caballos para competir en carreras"
+    }
+  },
+  "items": [
+    {
+      "id": "1",
+      "name": "Pan Básico",
+      "description": "Un delicioso pan recién horneado",
+      "price": 50,
+      "type": "food",
+      "emoji": "🍞",
+      "rarity": "common",
+      "effect": "hunger",
+      "available": true,
+      "stackable": true
+    },
+    {
+      "id": "2",
+      "name": "Croissant Dorado",
+      "description": "Un croissant premium con mantequilla francesa",
+      "price": 150,
+      "type": "food",
+      "emoji": "🥐",
+      "rarity": "uncommon",
+      "effect": "hunger",
+      "available": true,
+      "stackable": true
+    },
+    {
+      "id": "3",
+      "name": "Baguette Real",
+      "description": "La baguette favorita de la realeza",
+      "price": 300,
+      "type": "food",
+      "emoji": "🥖",
+      "rarity": "rare",
+      "effect": "hunger",
+      "available": true,
+      "stackable": true
+    },
+    {
+      "id": "4",
+      "name": "Rol Especial de la Tienda",
+      "description": "Rol único disponible en la tienda del reino",
+      "price": 5000000000000000000000,
+      "type": "role",
+      "emoji": "👑",
+      "rarity": "legendary",
+      "role_name": "Rol Especial Tienda",
+      "role_id": "1401891479399567361",
+      "equip_phrase": "¡Felicidades! Ahora tienes el rol especial de la tienda.",
+      "available": true,
+      "stackable": false
+    },
+    {
+      "id": "5",
+      "name": "Adicto al Café",
+      "description": "Te permite hacer el comando !trabajar dos veces seguidas (sin cooldown)",
+      "price": 15000,
+      "type": "boost",
+      "emoji": "☕",
+      "rarity": "rare",
+      "effect": "coffee_addict",
+      "uses": 1,
+      "available": false,
+      "stackable": true
+    },
+    {
+      "id": "6",
+      "name": "Mejor Prevenir que Curar",
+      "description": "Previene pérdidas - cualquier apuesta que hagas si pierdes no te quita el dinero",
+      "price": 600000,
+      "type": "boost",
+      "emoji": "🛡️",
+      "rarity": "legendary",
+      "effect": "loss_prevention",
+      "uses": 1,
+      "available": true,
+      "stackable": true
+     },
+     {
+       "id": "11",
+       "name": "Loco de la Recolección",
+       "description": "Reduce a la mitad los cooldowns de tus próximas recolecciones",
+       "price": 40000,
+       "type": "boost",
+       "emoji": "🚀",
+       "rarity": "epic",
+       "effect": "collect_rush",
+       "uses": 1,
+       "available": true,
+       "stackable": true
+    },
+    {
+      "id": "7",
+      "name": "Caballo Básico",
+      "description": "Un caballo confiable para carreras",
+      "price": 1000,
+      "type": "horse",
+      "emoji": "🐎",
+      "rarity": "common",
+      "speed": 5,
+      "stamina": 5,
+      "available": true,
+      "stackable": false
+    },
+    {
+      "id": "8",
+      "name": "Caballo Veloz",
+      "description": "Un caballo rápido con buenas probabilidades",
+      "price": 2500,
+      "type": "horse",
+      "emoji": "🏇",
+      "rarity": "uncommon",
+      "speed": 7,
+      "stamina": 6,
+      "available": true,
+      "stackable": false
+    },
+    {
+      "id": "9",
+      "name": "Caballo de Guerra",
+      "description": "Un caballo legendario con estadísticas superiores",
+      "price": 5000,
+      "type": "horse",
+      "emoji": "⚔️",
+      "rarity": "epic",
+      "speed": 9,
+      "stamina": 8,
+      "available": true,
+      "stackable": false
+    },
+    {
+      "id": "10",
+      "name": "Pegaso Mítico",
+      "description": "El caballo más raro y poderoso del reino",
+      "price": 15000,
+      "type": "horse",
+      "emoji": "🦄",
+      "rarity": "mythic",
+      "speed": 10,
+      "stamina": 10,
+      "available": true,
+      "stackable": false
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "reinodelpan-bot",
+  "version": "1.0.0",
+  "description": "Bot de economía estilo UnbelievaBoat para ReinoDelPan",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
+    "discord.js": "^14.22.1",
+    "ms": "^2.1.3",
+    "mysql2": "^3.14.3",
+    "ws": "^8.21.0"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "economy"
+  ],
+  "author": "ReinoDelPan",
+  "license": "MIT"
+}
