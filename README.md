@@ -1,12 +1,11 @@
-#  ReinoDelPan Economy Bot
+# ReinoDelPan Economy Bot
 
 Un bot de economía.
 
-
-##  Instalación
+## Instalación
 
 ### Prerrequisitos
-- **Node.js** 
+- **Node.js**
 
 ### Pasos de Instalación
 
@@ -22,9 +21,9 @@ Un bot de economía.
    ```
 
 3. **Configura la base de datos**
-   
+
    **Configura Supabase:**
-   
+
    1. Ve a [Supabase](https://supabase.com) y crea un nuevo proyecto
    2. En el dashboard, ve a Settings > API para obtener tu URL y claves
    3. Actualiza tu `config.json` con los datos de Supabase:
@@ -42,11 +41,11 @@ Un bot de economía.
    VITE_SUPABASE_ANON_KEY=tu_anon_key_aqui
    SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key_aqui
    ```
-   
+
    5. **Ejecuta las siguientes migraciones SQL en Supabase:**
-   
+
    Ve a SQL Editor en tu dashboard de Supabase y ejecuta:
-   
+
    ```sql
    -- Tabla de economía de usuarios
    CREATE TABLE users_economy (
@@ -186,94 +185,94 @@ Un bot de economía.
    CREATE POLICY "Enable all operations for service role" ON user_levels
      FOR ALL USING (true);
 
--- Tabla de entidades (Gobierno del Reino)
-CREATE TABLE entidades (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT,
-  emoji TEXT DEFAULT '🏛️',
-  balance BIGINT DEFAULT 0,
-  total_earned BIGINT DEFAULT 0,
-  total_withdrawn BIGINT DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  is_public BOOLEAN DEFAULT true
-);
+   -- Tabla de entidades (Gobierno del Reino)
+   CREATE TABLE entidades (
+     id TEXT PRIMARY KEY,
+     name TEXT NOT NULL,
+     description TEXT,
+     emoji TEXT DEFAULT '🏛️',
+     balance BIGINT DEFAULT 0,
+     total_earned BIGINT DEFAULT 0,
+     total_withdrawn BIGINT DEFAULT 0,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     is_public BOOLEAN DEFAULT true
+   );
 
--- Insertar Gobierno del Reino por defecto
-INSERT INTO entidades (id, name, description, emoji, balance, total_earned, is_public)
-VALUES ('gobierno', 'Gobierno del Reino', 'Entidad gubernamental del Reino del Pan', '🏛️', 0, 0, true);
+   -- Insertar Gobierno del Reino por defecto
+   INSERT INTO entidades (id, name, description, emoji, balance, total_earned, is_public)
+   VALUES ('gobierno', 'Gobierno del Reino', 'Entidad gubernamental del Reino del Pan', '🏛️', 0, 0, true);
 
--- Habilitar RLS
-ALTER TABLE entidades ENABLE ROW LEVEL SECURITY;
+   -- Habilitar RLS
+   ALTER TABLE entidades ENABLE ROW LEVEL SECURITY;
 
--- Políticas RLS
-CREATE POLICY "select_entidades" ON entidades FOR SELECT
-  TO authenticated, anon USING (true);
+   -- Políticas RLS
+   CREATE POLICY "select_entidades" ON entidades FOR SELECT
+     TO authenticated, anon USING (true);
 
-CREATE POLICY "insert_entidades" ON entidades FOR INSERT
-  TO authenticated WITH CHECK (true);
+   CREATE POLICY "insert_entidades" ON entidades FOR INSERT
+     TO authenticated WITH CHECK (true);
 
-CREATE POLICY "update_entidades" ON entidades FOR UPDATE
-  TO authenticated USING (true) WITH CHECK (true);
+   CREATE POLICY "update_entidades" ON entidades FOR UPDATE
+     TO authenticated USING (true) WITH CHECK (true);
 
-  -- Tabla de empresas (creadas por usuarios)
-CREATE TABLE empresas (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  owner_id TEXT NOT NULL,
-  name TEXT NOT NULL,
-  description TEXT,
-  balance BIGINT DEFAULT 0,
-  emoji TEXT DEFAULT '🏢',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(owner_id, name)
-);
+   -- Tabla de empresas (creadas por usuarios)
+   CREATE TABLE empresas (
+     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+     owner_id TEXT NOT NULL,
+     name TEXT NOT NULL,
+     description TEXT,
+     balance BIGINT DEFAULT 0,
+     emoji TEXT DEFAULT '🏢',
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     UNIQUE(owner_id, name)
+   );
 
--- Habilitar RLS
-ALTER TABLE empresas ENABLE ROW LEVEL SECURITY;
+   -- Habilitar RLS
+   ALTER TABLE empresas ENABLE ROW LEVEL SECURITY;
 
--- Políticas RLS
-CREATE POLICY "select_empresas" ON empresas FOR SELECT
-  TO authenticated, anon USING (true);
+   -- Políticas RLS
+   CREATE POLICY "select_empresas" ON empresas FOR SELECT
+     TO authenticated, anon USING (true);
 
-CREATE POLICY "insert_empresas" ON empresas FOR INSERT
-  TO authenticated WITH CHECK (true);
+   CREATE POLICY "insert_empresas" ON empresas FOR INSERT
+     TO authenticated WITH CHECK (true);
 
-CREATE POLICY "update_empresas" ON empresas FOR UPDATE
-  TO authenticated USING (true) WITH CHECK (true);
+   CREATE POLICY "update_empresas" ON empresas FOR UPDATE
+     TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "delete_empresas" ON empresas FOR DELETE
-  TO authenticated USING (true);
+   CREATE POLICY "delete_empresas" ON empresas FOR DELETE
+     TO authenticated USING (true);
 
-  -- Tabla de productos/tienda de cada empresa
-CREATE TABLE entidad_shop (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
-  product_id TEXT NOT NULL,
-  name TEXT NOT NULL,
-  description TEXT,
-  price BIGINT NOT NULL DEFAULT 0,
-  emoji TEXT DEFAULT '📦',
-  category TEXT DEFAULT 'general',
-  stackable BOOLEAN DEFAULT true,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(empresa_id, product_id)
-);
+   -- Tabla de productos/tienda de cada empresa
+   CREATE TABLE entidad_shop (
+     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+     empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE CASCADE,
+     product_id TEXT NOT NULL,
+     name TEXT NOT NULL,
+     description TEXT,
+     price BIGINT NOT NULL DEFAULT 0,
+     emoji TEXT DEFAULT '📦',
+     category TEXT DEFAULT 'general',
+     stackable BOOLEAN DEFAULT true,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     UNIQUE(empresa_id, product_id)
+   );
 
--- Habilitar RLS
-ALTER TABLE entidad_shop ENABLE ROW LEVEL SECURITY;
+   -- Habilitar RLS
+   ALTER TABLE entidad_shop ENABLE ROW LEVEL SECURITY;
 
--- Políticas RLS
-CREATE POLICY "select_entidad_shop" ON entidad_shop FOR SELECT
-  TO authenticated, anon USING (true);
+   -- Políticas RLS
+   CREATE POLICY "select_entidad_shop" ON entidad_shop FOR SELECT
+     TO authenticated, anon USING (true);
 
-CREATE POLICY "insert_entidad_shop" ON entidad_shop FOR INSERT
-  TO authenticated WITH CHECK (true);
+   CREATE POLICY "insert_entidad_shop" ON entidad_shop FOR INSERT
+     TO authenticated WITH CHECK (true);
 
-CREATE POLICY "update_entidad_shop" ON entidad_shop FOR UPDATE
-  TO authenticated USING (true) WITH CHECK (true);
+   CREATE POLICY "update_entidad_shop" ON entidad_shop FOR UPDATE
+     TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "delete_entidad_shop" ON entidad_shop FOR DELETE
-  TO authenticated USING (true);
+   CREATE POLICY "delete_entidad_shop" ON entidad_shop FOR DELETE
+     TO authenticated USING (true);
    ```
 
 4. **Inicia el bot**
@@ -281,7 +280,7 @@ CREATE POLICY "delete_entidad_shop" ON entidad_shop FOR DELETE
    node .
    ```
 
-##  Estructura de Archivos
+## Estructura de Archivos
 
 ```
 ReinoDelPan/
@@ -340,7 +339,7 @@ ReinoDelPan/
     └── levelrol.json            # ← Roles por nivel
 ```
 
-##  Sistema Anti-Bot
+## Sistema Anti-Bot
 
 El bot incluye un sistema anti-bot que detecta comportamientos automatizados.
 
@@ -385,7 +384,7 @@ En `config.json`:
 - **Solo Alertas**: No banea automáticamente, solo envía alertas para revisión manual
 - **Análisis Detallado**: Rastrea timing perfecto, varianza, patrones robóticos y más
 
-##  Sistema de Niveles
+## Sistema de Niveles
 
 El bot incluye un sistema de XP que premia la actividad en el servidor.
 
@@ -399,13 +398,13 @@ El bot incluye un sistema de XP que premia la actividad en el servidor.
 ### Fórmula de progresión
 
 | Nivel | XP para ese nivel | XP total acumulada |
-|------:|------------------:|-------------------:|
-| 1     | 100               | 100                |
-| 5     | 342               | 1.105              |
-| 10    | 794               | 3.660              |
-| 20    | 1.741             | 13.565             |
-| 50    | 5.743             | 73.588             |
-| 100   | 15.849            | 277.350            |
+|------:|-------------------:|--------------------:|
+| 1     | 100                 | 100                  |
+| 5     | 342                 | 1.105                |
+| 10    | 794                 | 3.660                |
+| 20    | 1.741               | 13.565               |
+| 50    | 5.743               | 73.588                |
+| 100   | 15.849              | 277.350               |
 
 ### Configurar Roles por Nivel
 
@@ -420,12 +419,12 @@ Edita `data/levelrol.json`:
     { "level": 30, "roleId": "ID_DEL_ROL", "name": "Experto" },
     { "level": 50, "roleId": "ID_DEL_ROL", "name": "Élite" },
     { "level": 75, "roleId": "ID_DEL_ROL", "name": "Leyenda" },
-    { "level": 100,"roleId": "ID_DEL_ROL", "name": "Rey del Pan" }
+    { "level": 100, "roleId": "ID_DEL_ROL", "name": "Rey del Pan" }
   ]
 }
 ```
 
-##  Configuración
+## Configuración
 
 Edita el archivo `config.json` con tus configuraciones:
 
@@ -561,7 +560,6 @@ En los comandos que requieren cantidad puedes usar:
 - **Legendary** *(Dorado)* - Probabilidad muy baja
 - **Mythic** *(Rojo)* - Probabilidad extremadamente baja
 
-
 ### Configuración de Roles Admin
 
 En `config.json`, configura los roles que pueden usar comandos de administración:
@@ -600,7 +598,7 @@ El bot incluye un sistema de permisos de canales. Edita `data/permitchannels.jso
 
 ## Personalización
 
-###  Configurar Roles de Recolección
+### Configurar Roles de Recolección
 
 Edita `data/collect.json`:
 
@@ -615,7 +613,7 @@ Edita `data/collect.json`:
       "roles": ["ID_DEL_ROL_1", "ID_DEL_ROL_2"]
     },
     "moderadores": {
-      "name": "Moderadores", 
+      "name": "Moderadores",
       "cooldown": 21600000,
       "amount": 2000,
       "emoji": "🛡️",
@@ -625,7 +623,7 @@ Edita `data/collect.json`:
 }
 ```
 
-###  Configurar Empresas
+### Configurar Empresas
 
 Edita `data/empresas.json` para agregar nuevas empresas a Pancor.co:
 
@@ -656,7 +654,7 @@ Edita `data/empresas.json` para agregar nuevas empresas a Pancor.co:
 }
 ```
 
-###  Configurar Items de Tienda
+### Configurar Items de Tienda
 
 Edita `data/shop.json`:
 
@@ -677,7 +675,7 @@ Edita `data/shop.json`:
 }
 ```
 
-###  Configurar Préstamos
+### Configurar Préstamos
 
 Edita `data/prestamos.json` para agregar nuevos tipos de préstamos:
 
@@ -700,7 +698,7 @@ Edita `data/prestamos.json` para agregar nuevos tipos de préstamos:
 }
 ```
 
-###  Configurar Moneda Personalizada
+### Configurar Moneda Personalizada
 
 En `config.json`:
 ```json
@@ -712,7 +710,7 @@ En `config.json`:
 }
 ```
 
-###  Límites del Casino
+### Límites del Casino
 
 En `config.json`:
 ```json
@@ -769,11 +767,10 @@ En `config.json`:
 - **Loco de la Recolección**: Cooldowns reducidos
 - Seguros de casino de Pancor.co
 
-**Estado del proyecto:** En desarrollo 
+**Estado del proyecto:** En desarrollo
 
+---
 
-----
-
-##  Créditos
+## Créditos
 
 **Desarrollado por:** Rexy
