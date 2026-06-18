@@ -64,7 +64,7 @@ module.exports = {
         new ButtonBuilder()
           .setLabel('Ir al Portal de Trámites')
           .setStyle(ButtonStyle.Link)
-          .setURL('https://mineco.duckdns.org/lpb/tramites')
+          .setURL('https://mineco.duckdns.org/lpb/tramites/crear-empresa')
           .setEmoji('📝')
       );
 
