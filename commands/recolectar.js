@@ -130,7 +130,7 @@ module.exports = {
         .addFields(
           { name: '💰 Categorías Recolectadas', value: categoriesDescription, inline: false },
           { name: '💵 Total Bruto', value: CurrencyHelper.format(totalAmount), inline: true },
-          { name: '🏛️ IRPF (' + irpfRate + '%)', value: CurrencyHelper.format(irpfAmount), inline: true },
+          { name: '🏛️ IRPF', value: CurrencyHelper.format(irpfAmount), inline: true },
           { name: '🏦 Depositado al Banco', value: CurrencyHelper.format(netAmount), inline: true }
         )
         .setFooter({ text: `IRPF enviado al Gobierno del Reino` })

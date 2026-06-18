@@ -837,17 +837,17 @@ class SupabaseDatabase {
   }
 
   async updateEmpresa(empresaId, data) {
-    try {
-      const { error } = await this.supabase
-        .from('empresas')
-        .update(data)
-        .eq('id', empresaId);
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error actualizando empresa:', error);
-      throw error;
-    }
+  try {
+    const { error } = await this.supabaseAdmin
+      .from('empresas')
+      .update(data)
+      .eq('id', empresaId);
+    if (error) throw error;
+  } catch (error) {
+    console.error('Error actualizando empresa:', error);
+    throw error;
   }
+}
 
   async donateToEntidad(entidadId, amount) {
     try {
@@ -902,6 +902,41 @@ class SupabaseDatabase {
       return [];
     }
   }
+
+  // ─── PRODUCTOS DE EMPRESA (stock) ─────────────────────────────────────────
+
+async getEmpresaProduct(empresaId, productId) {
+  try {
+    const { data, error } = await this.supabase
+      .from('entidad_shop')
+      .select('*')
+      .eq('empresa_id', empresaId)
+      .eq('product_id', productId)
+      .single();
+
+    if (error && error.code === 'PGRST116') return null;
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error obteniendo producto de empresa:', error);
+    return null;
+  }
+}
+
+async updateProductStock(empresaId, productId, newStock) {
+  try {
+    const { error } = await this.supabaseAdmin   // ← Usar admin
+      .from('entidad_shop')
+      .update({ stock: newStock })
+      .eq('empresa_id', empresaId)
+      .eq('product_id', productId);
+    if (error) throw error;
+    console.log(`[DB] Stock actualizado: ${productId} → ${newStock}`);
+  } catch (error) {
+    console.error('Error actualizando stock:', error);
+    throw error;
+  }
+}
 
   async addProductToEmpresa(empresaId, productId, name, price, description = null, emoji = '📦', category = 'general', stackable = true) {
     try {
